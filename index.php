@@ -1,53 +1,28 @@
 <?php
-$img = imagecreatefrompng('./static/fogs.png');
+/**
+ * Project: cisco-ip-phone-services
+ * Created: 01/08/2017
+ * Copyright 2017 Andrew O'Rourke
+ */
+require_once "vendor/autoload.php";
 
-imagefilter($img, IMG_FILTER_GRAYSCALE);
-imagepalettetotruecolor($img);
+global $config;
 
-$width = imagesx($img);
-$height = imagesy($img);
+/*$config = json_decode(file_get_contents('config.json'));
 
-$imageData = '';
-$currentBlock = '';
+ORM::configure($config->orm->string);
+ORM::configure('username', $config->orm->username);
+ORM::configure('password', $config->orm->password);
+Model::$short_table_names = true;*/
 
-for ($y = 0; $y < $height; $y++) {
-    for ($x = 0; $x < $width; $x++) {
-        $rgb = imagecolorat($img, $x, $y);
-        $b = $rgb & 0xFF;
-        $blue = $rgb & 0xFF;
+\Cisco\Controller\Idle::hookIn();
 
-        if ($blue <= 64)
-            $color = '11';
-        else if ($blue <= 128)
-            $color = '10';
-        else if ($blue <= 192)
-            $color = '01';
-        else
-            $color = '00';
+Flight::set('flight.views.path', 'views');
 
-        $currentBlock = $color . $currentBlock;
-        if(strlen($currentBlock) >= 8) {
-            $value = bindec($currentBlock);
-            $hex = dechex($value);
-            $hex = str_pad($hex, 2, '0', STR_PAD_LEFT);
-            $hex .= '';
-            $imageData .= $hex;
-            $currentBlock = '';
-        }
-    }
-}
+Flight::map('notFound', function(){
+    http_response_code(404);
+});
 
-if (strlen($currentBlock) > 0) {
-    $imageData .= dechex(bindec(strrev($currentBlock)));
-}
+Flight::set('flight.log_errors', true);
 
-header('Content-Type: text/xml')
-?><CiscoIPPhoneImage>
-    <Title>Image Object</Title>
-    <LocationX>-1</LocationX>
-    <LocationY>-1</LocationY>
-    <Width><?=$width;?></Width>
-    <Height><?=$height;?></Height>
-    <Depth>2</Depth>
-    <Data><?=$imageData;?></Data>
-</CiscoIPPhoneImage>
+Flight::start();
