@@ -15,12 +15,13 @@ ORM::configure('username', $config->orm->username);
 ORM::configure('password', $config->orm->password);
 Model::$short_table_names = true;*/
 
-\Cisco\Controller\Idle::hookIn();
+\Cisco\Controller\Handset::hookIn();
 
 Flight::set('flight.views.path', 'views');
 
 Flight::map('notFound', function(){
     http_response_code(404);
+    echo 'HTTP 404 - PAGE NOT FOUND' . PHP_EOL . $_SERVER['REQUEST_URI'];
 });
 
 Flight::set('flight.log_errors', true);
