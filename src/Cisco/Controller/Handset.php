@@ -8,6 +8,7 @@
 namespace Cisco\Controller;
 
 use Cisco\Utils\CipImage;
+use Cisco\Utils\HandsetCapabilities;
 
 class Handset extends Base
 {
@@ -27,9 +28,9 @@ class Handset extends Base
     }
 
     public static function info() {
-        foreach ($_SERVER as $key => $value) {
-            echo $key . ' = ' . $value . PHP_EOL;
-        }
+        $capabilities = new HandsetCapabilities();
+        echo $capabilities->getModelName() . PHP_EOL;
+        echo $capabilities->getDisplayWidth() . 'x' . $capabilities->getDisplayHeight() . ' ' . $capabilities->getDisplaySpace() . ' Display';
     }
 
     public static function auth() {
