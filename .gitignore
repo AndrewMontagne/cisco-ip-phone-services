@@ -1,5 +1,6 @@
 /vendor/
 /build/
 /.idea/
-config.json
-/logs/
+/config/*.json
+!/config/*.dist.json
+*.log

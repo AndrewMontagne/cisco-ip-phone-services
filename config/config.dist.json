@@ -1,0 +1,9 @@
+{
+    "orm": {
+        "string":   "mysql:host=localhost;dbname=asterisk",
+        "username": "asterisk",
+        "password": "asterisk"
+    },
+    "serviceHost": "10.13.37.2",
+    "pbxHost": "10.13.37.2"
+}
